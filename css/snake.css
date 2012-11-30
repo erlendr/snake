@@ -1,0 +1,15 @@
+body {
+	font-family: Arial;
+	font-size: 90%;
+}
+
+.snakeLogo {
+	font-family: 'Comfortaa', cursive;
+	font-size: 5em;
+	margin:0;
+}
+
+#snakeCanvas {
+	border: 1px solid black;
+}
+
