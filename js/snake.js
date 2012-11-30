@@ -150,22 +150,26 @@ var SNAKE = (function(s) {
 		$(document).keydown(function(event) {
 			switch(event.keyCode) {
 				case KEYCODE_UP:
-					if(!gamePaused && s.currentHeading !== s.headings.south && !snakeIsUpdating) { 
+					if(!gamePaused && s.currentHeading !== s.headings.south && !snakeIsUpdating) {
+						snakeIsUpdating = true;
 						s.currentHeading = s.headings.north;
 					}
 					break;
 				case KEYCODE_DOWN:
-					if(!gamePaused && s.currentHeading !== s.headings.north && !snakeIsUpdating) { 
+					if(!gamePaused && s.currentHeading !== s.headings.north && !snakeIsUpdating) {
+						snakeIsUpdating = true;
 						s.currentHeading = s.headings.south;
 					}
 					break;
 				case KEYCODE_LEFT:
-					if(!gamePaused && s.currentHeading !== s.headings.west && !snakeIsUpdating) { 
+					if(!gamePaused && s.currentHeading !== s.headings.west && !snakeIsUpdating) {
+						snakeIsUpdating = true;
 						s.currentHeading = s.headings.east;
 					}
 					break;	
 				case KEYCODE_RIGHT:
-					if(!gamePaused && s.currentHeading !== s.headings.east && !snakeIsUpdating) { 
+					if(!gamePaused && s.currentHeading !== s.headings.east && !snakeIsUpdating) {
+						snakeIsUpdating = true;
 						s.currentHeading = s.headings.west;
 					}
 					break;					
