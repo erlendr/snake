@@ -58,7 +58,7 @@ var GRAPHICS = (function (g) {
 
 	function handleDrawEndScreen(msg, data) {
 		console.log(msg, data);
-		g.drawEndscreen(data.color, data.score);
+		g.drawEndScreen(data.color, data.score);
 	}
 	//Setup subscription for ADD FOOD event
 	PubSub.subscribe("ADD FOOD", drawFood);
