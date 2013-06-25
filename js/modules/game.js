@@ -150,65 +150,68 @@ var SNAKE = (function(s) {
 		}
 	}
 
+	var handleKeyboard = function(event) {
+		switch(event.keyCode) {
+			case KEYCODE_UP:
+				if(!gamePaused && s.currentHeading !== s.headings.south && !snakeIsUpdating) {
+					snakeIsUpdating = true;
+					s.currentHeading = s.headings.north;
+				}
+				break;
+			case KEYCODE_DOWN:
+				if(!gamePaused && s.currentHeading !== s.headings.north && !snakeIsUpdating) {
+					snakeIsUpdating = true;
+					s.currentHeading = s.headings.south;
+				}
+				break;
+			case KEYCODE_LEFT:
+				if(!gamePaused && s.currentHeading !== s.headings.west && !snakeIsUpdating) {
+					snakeIsUpdating = true;
+					s.currentHeading = s.headings.east;
+				}
+				break;
+			case KEYCODE_RIGHT:
+				if(!gamePaused && s.currentHeading !== s.headings.east && !snakeIsUpdating) {
+					snakeIsUpdating = true;
+					s.currentHeading = s.headings.west;
+				}
+				break;
+			case KEYCODE_R:
+				console.log("R PRESSED");
+				s.restart();
+				break;
+			case KEYCODE_SPACE:
+				console.log("SPACE PRESSED");
+				if(gamePaused) {
+					s.play();
+				}else {
+					s.pause();
+				}
+				break;
+			case KEYCODE_ENTER:
+				console.log("ENTER PRESSED");
+				if(gamePaused) {
+					s.play();
+				}else {
+					s.pause();
+				}
+				break;
+			case KEYCODE_P:
+				console.log("P PRESSED");
+				if(gamePaused) {
+					s.play();
+				}else {
+					s.pause();
+				}
+				break;
+		}
+	}
+
 	function initKeyboard() {
 		//Keyboard handling
 		$(document).unbind("keydown");
-		$(document).keydown(function(event) {
-			switch(event.keyCode) {
-				case KEYCODE_UP:
-					if(!gamePaused && s.currentHeading !== s.headings.south && !snakeIsUpdating) {
-						snakeIsUpdating = true;
-						s.currentHeading = s.headings.north;
-					}
-					break;
-				case KEYCODE_DOWN:
-					if(!gamePaused && s.currentHeading !== s.headings.north && !snakeIsUpdating) {
-						snakeIsUpdating = true;
-						s.currentHeading = s.headings.south;
-					}
-					break;
-				case KEYCODE_LEFT:
-					if(!gamePaused && s.currentHeading !== s.headings.west && !snakeIsUpdating) {
-						snakeIsUpdating = true;
-						s.currentHeading = s.headings.east;
-					}
-					break;
-				case KEYCODE_RIGHT:
-					if(!gamePaused && s.currentHeading !== s.headings.east && !snakeIsUpdating) {
-						snakeIsUpdating = true;
-						s.currentHeading = s.headings.west;
-					}
-					break;
-				case KEYCODE_R:
-					console.log("R PRESSED");
-					s.restart();
-					break;
-				case KEYCODE_SPACE:
-					console.log("SPACE PRESSED");
-					if(gamePaused) {
-						s.play();
-					}else {
-						s.pause();
-					}
-					break;
-				case KEYCODE_ENTER:
-					console.log("ENTER PRESSED");
-					if(gamePaused) {
-						s.play();
-					}else {
-						s.pause();
-					}
-					break;
-				case KEYCODE_P:
-					console.log("P PRESSED");
-					if(gamePaused) {
-						s.play();
-					}else {
-						s.pause();
-					}
-					break;
-			}
-		});
+		var throttledHandleKeyboard = _.throttle(handleKeyboard, 100);
+		$(document).keydown(throttledHandleKeyboard);
 	}
 
 	s.play = function() {
