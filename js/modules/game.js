@@ -210,7 +210,7 @@ var SNAKE = (function(s) {
 	function initKeyboard() {
 		//Keyboard handling
 		$(document).unbind("keydown");
-		var throttledHandleKeyboard = _.throttle(handleKeyboard, 100);
+		var throttledHandleKeyboard = _.throttle(handleKeyboard, 60);
 		$(document).keydown(throttledHandleKeyboard);
 	}
 
