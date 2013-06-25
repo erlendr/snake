@@ -244,47 +244,58 @@ var SNAKE = (function(s) {
 
 	function gameLoop() {
 		updateSnakePosition();
+		PubSub.publish("GAME TICK")
 	}
 
 	function updateSnakePosition() {
 		snakeIsUpdating = true;
 		var currentHead = SNAKE.snake[SNAKE.snake.length-1];
 
+		var destinationPosX = currentHead.posX + s.currentHeading[0];
+		var destinationPosY = currentHead.posY + s.currentHeading[1];
+
 		if(isColliding(
-			currentHead.posX,
-			currentHead.posY,
+			destinationPosX,
+			destinationPosY,
 			SNAKE.getGameboardSize().xSize,
 			SNAKE.getGameboardSize().ySize
 			)) {
-
+			console.log("Collision with wall @", destinationPosX, destinationPosY);
 			gameOver();
 		}
 		else {
-			//Wall not hit, check if snake itself or food is it
-			var destinationPosX = currentHead.posX + s.currentHeading[0];
-			var destinationPosY = currentHead.posY + s.currentHeading[1];
-
+			//Wall not hit, check if snake itself or food is next hit
+			var newSnakeHead;
+			//If game board has something at destination position
 			if(typeof(gameBoard[destinationPosX][destinationPosY]) !== "undefined") {
+				//Check if destination collides with snake itself
 				if(typeof(gameBoard[destinationPosX][destinationPosY].snake) === "boolean") {
 					gameOver();
 				}
+				//Else check if food is at next destination
 				else if(typeof(gameBoard[destinationPosX][destinationPosY].food) === "boolean") {
+					//Eat food
 					s.eatFood(destinationPosX, destinationPosY);
-					var newSnakeHead = new snakePart(0,0);
+					//Increase length of snake by one part
+					newSnakeHead = new snakePart(0,0);
 				}
 			}
-
 			else {
-				var newSnakeHead = SNAKE.snake.shift();
-				GRAPHICS.clearBox(newSnakeHead.posX, newSnakeHead.posY); //Remove tail graphically
+				//Move head of snake
+				newSnakeHead = SNAKE.snake.shift();
+				//GRAPHICS.clearBox(newSnakeHead.posX, newSnakeHead.posY); //Remove tail graphically
+				PubSub.publishSync("CLEAR SNAKE PART", newSnakeHead);
 				gameBoard[newSnakeHead.posX][newSnakeHead.posY] = undefined; //Clear tail from gameBoard
 			}
 
-			newSnakeHead.posX = destinationPosX;
-			newSnakeHead.posY = destinationPosY;
+			//Update snake head position
+			newSnakeHead.posX = currentHead.posX + s.currentHeading[0];
+			newSnakeHead.posY = currentHead.posY + s.currentHeading[1];
 			SNAKE.snake.push(newSnakeHead);
 			gameBoard[newSnakeHead.posX][newSnakeHead.posY] = newSnakeHead;
-			GRAPHICS.drawBox(newSnakeHead.posX, newSnakeHead.posY, "black");
+
+			//GRAPHICS.drawBox(newSnakeHead.posX, newSnakeHead.posY, "black");
+			PubSub.publish("ADD SNAKE PART", newSnakeHead);
 			snakeIsUpdating = false;
 		}
 	}
@@ -292,10 +303,10 @@ var SNAKE = (function(s) {
 	function isColliding(posX, posY, gameBoardXSize, gameBoardYSize) {
 		return (
 			//Wall collision
-			posX+1 === gameBoardXSize ||
-			posY+1 === gameBoardYSize ||
-			posX === 0 ||
-			posY === 0)
+			posX === gameBoardXSize ||
+			posY === gameBoardYSize ||
+			posX === -1 ||
+			posY === -1)
 	}
 
 	function updateGameScore() {

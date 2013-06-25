@@ -52,7 +52,6 @@ var GRAPHICS = (function (g) {
 	}
 
 	function drawSnakePart(msg, snakePart) {
-		console.log(msg, snakePart);
 		g.drawBox(snakePart.posX, snakePart.posY, "black");
 	}
 
@@ -60,11 +59,17 @@ var GRAPHICS = (function (g) {
 		console.log(msg, data);
 		g.drawEndScreen(data.color, data.score);
 	}
+
+	function handleSnakePart(msg, snakePart) {
+		g.clearBox(snakePart.posX, snakePart.posY);
+	}
+
 	//Setup subscription for ADD FOOD event
 	PubSub.subscribe("ADD FOOD", drawFood);
 	PubSub.subscribe("DRAW FOOD", drawFood);
 	PubSub.subscribe("ADD SNAKE PART", drawSnakePart);
 	PubSub.subscribe("CLEAR", g.clearAll);
+	PubSub.subscribe("CLEAR SNAKE PART", handleSnakePart);
 	PubSub.subscribe("DRAW END SCREEN", handleDrawEndScreen);
 
 	return g;
